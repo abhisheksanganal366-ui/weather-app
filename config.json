@@ -1,0 +1,13 @@
+{
+  "apiConfig": {
+    "provider": "OpenWeather",
+    "baseUrl": "https://api.openweathermap.org/data/2.5/weather",
+    "units": "metric",
+    "instructions": "Get your free API key from https://openweathermap.org/api"
+  },
+  "appSettings": {
+    "defaultCity": "",
+    "temperatureUnit": "celsius",
+    "theme": "gradient"
+  }
+}
