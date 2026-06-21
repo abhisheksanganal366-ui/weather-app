@@ -1,72 +1,58 @@
 // OpenWeather API configuration
-const API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your OpenWeather API key
+// Get your FREE API key at: https://openweathermap.org/api
+// Then replace 'YOUR_API_KEY_HERE' below with your actual key
+const API_KEY = 'YOUR_API_KEY_HERE';
 const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
-const DEMO_MODE = true; // Set to false when you have a real API key
 
-// Sample weather data for demo
+// If no real API key is set, the app falls back to demo mode with limited cities
+const DEMO_MODE = !API_KEY || API_KEY === 'YOUR_API_KEY_HERE';
+
+// Demo data (used only when no API key is provided)
 const demoData = {
     'london': {
-        name: 'London',
-        sys: { country: 'GB' },
+        name: 'London', sys: { country: 'GB' },
         weather: [{ description: 'partly cloudy', icon: '02d' }],
-        main: { temp: 15, feels_like: 13, humidity: 72 },
-        wind: { speed: 4.5 }
+        main: { temp: 15, feels_like: 13, humidity: 72 }, wind: { speed: 4.5 }
     },
     'new york': {
-        name: 'New York',
-        sys: { country: 'US' },
+        name: 'New York', sys: { country: 'US' },
         weather: [{ description: 'clear sky', icon: '01d' }],
-        main: { temp: 22, feels_like: 21, humidity: 55 },
-        wind: { speed: 3.2 }
+        main: { temp: 22, feels_like: 21, humidity: 55 }, wind: { speed: 3.2 }
     },
     'tokyo': {
-        name: 'Tokyo',
-        sys: { country: 'JP' },
+        name: 'Tokyo', sys: { country: 'JP' },
         weather: [{ description: 'light rain', icon: '10d' }],
-        main: { temp: 18, feels_like: 17, humidity: 80 },
-        wind: { speed: 2.8 }
+        main: { temp: 18, feels_like: 17, humidity: 80 }, wind: { speed: 2.8 }
     },
     'paris': {
-        name: 'Paris',
-        sys: { country: 'FR' },
+        name: 'Paris', sys: { country: 'FR' },
         weather: [{ description: 'overcast clouds', icon: '04d' }],
-        main: { temp: 16, feels_like: 14, humidity: 68 },
-        wind: { speed: 5.1 }
+        main: { temp: 16, feels_like: 14, humidity: 68 }, wind: { speed: 5.1 }
     },
     'dubai': {
-        name: 'Dubai',
-        sys: { country: 'AE' },
+        name: 'Dubai', sys: { country: 'AE' },
         weather: [{ description: 'sunny', icon: '01d' }],
-        main: { temp: 35, feels_like: 38, humidity: 45 },
-        wind: { speed: 4.0 }
+        main: { temp: 35, feels_like: 38, humidity: 45 }, wind: { speed: 4.0 }
     },
     'sydney': {
-        name: 'Sydney',
-        sys: { country: 'AU' },
+        name: 'Sydney', sys: { country: 'AU' },
         weather: [{ description: 'few clouds', icon: '02d' }],
-        main: { temp: 24, feels_like: 23, humidity: 60 },
-        wind: { speed: 6.2 }
+        main: { temp: 24, feels_like: 23, humidity: 60 }, wind: { speed: 6.2 }
     },
     'mumbai': {
-        name: 'Mumbai',
-        sys: { country: 'IN' },
+        name: 'Mumbai', sys: { country: 'IN' },
         weather: [{ description: 'haze', icon: '50d' }],
-        main: { temp: 32, feels_like: 36, humidity: 75 },
-        wind: { speed: 3.5 }
+        main: { temp: 32, feels_like: 36, humidity: 75 }, wind: { speed: 3.5 }
     },
     'delhi': {
-        name: 'Delhi',
-        sys: { country: 'IN' },
+        name: 'Delhi', sys: { country: 'IN' },
         weather: [{ description: 'mist', icon: '50d' }],
-        main: { temp: 28, feels_like: 30, humidity: 70 },
-        wind: { speed: 2.5 }
+        main: { temp: 28, feels_like: 30, humidity: 70 }, wind: { speed: 2.5 }
     },
     'hubli': {
-        name: 'Hubli',
-        sys: { country: 'IN' },
+        name: 'Hubli', sys: { country: 'IN' },
         weather: [{ description: 'scattered clouds', icon: '03d' }],
-        main: { temp: 26, feels_like: 27, humidity: 65 },
-        wind: { speed: 3.0 }
+        main: { temp: 26, feels_like: 27, humidity: 65 }, wind: { speed: 3.0 }
     }
 };
 
@@ -82,6 +68,16 @@ const description = document.getElementById('description');
 const feelsLike = document.getElementById('feelsLike');
 const humidity = document.getElementById('humidity');
 const windSpeed = document.getElementById('windSpeed');
+const demoBadge = document.getElementById('demoBadge');
+
+// Update badge based on mode
+if (DEMO_MODE) {
+    demoBadge.textContent = '⚠️ Demo Mode – Limited Cities';
+    demoBadge.title = 'Add your API key in app.js to search any city worldwide';
+} else {
+    demoBadge.textContent = '🌍 Live Mode – All Cities Supported';
+    demoBadge.style.background = 'rgba(40, 200, 100, 0.25)';
+}
 
 // Weather icon mapping
 const weatherIcons = {
@@ -99,17 +95,13 @@ const weatherIcons = {
 // Event listeners
 searchBtn.addEventListener('click', () => {
     const city = cityInput.value.trim();
-    if (city) {
-        getWeather(city);
-    }
+    if (city) getWeather(city);
 });
 
 cityInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         const city = cityInput.value.trim();
-        if (city) {
-            getWeather(city);
-        }
+        if (city) getWeather(city);
     }
 });
 
@@ -117,40 +109,44 @@ cityInput.addEventListener('keypress', (e) => {
 async function getWeather(city) {
     try {
         showLoading();
-        
-        // Demo mode - use sample data
+
         if (DEMO_MODE) {
-            await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
-            
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 400));
+
             const cityLower = city.toLowerCase();
             const data = demoData[cityLower];
-            
+
             if (data) {
                 displayWeather(data);
             } else {
-                throw new Error(`City not found in demo mode. Try: ${Object.keys(demoData).join(', ')}`);
+                throw new Error(
+                    `"${city}" is not available in demo mode.\n` +
+                    `Demo cities: ${Object.keys(demoData).map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}.\n\n` +
+                    `To search ANY city worldwide, add your free API key from openweathermap.org into app.js.`
+                );
             }
             return;
         }
-        
-        // Real API mode
+
+        // Real API – supports every city in the world
         const response = await fetch(
             `${API_URL}?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`
         );
-        
+
         if (!response.ok) {
             if (response.status === 404) {
-                throw new Error('City not found. Please check the spelling and try again.');
+                throw new Error(`City "${city}" not found. Check the spelling and try again.`);
             } else if (response.status === 401) {
-                throw new Error('Invalid API key. Please check your configuration.');
+                throw new Error('Invalid API key. Please check the key in app.js.');
             } else {
-                throw new Error('Failed to fetch weather data. Please try again.');
+                throw new Error('Failed to fetch weather data. Please try again later.');
             }
         }
-        
+
         const data = await response.json();
         displayWeather(data);
-        
+
     } catch (error) {
         showError(error.message);
     }
@@ -158,18 +154,18 @@ async function getWeather(city) {
 
 // Display weather data
 function displayWeather(data) {
-    // Hide error and show weather display
     errorDiv.classList.add('hidden');
     weatherDisplay.classList.remove('hidden');
-    
-    // Update weather information
+
     cityName.textContent = `${data.name}, ${data.sys.country}`;
-    
+
     const iconCode = data.weather[0].icon;
     weatherIcon.textContent = weatherIcons[iconCode] || '🌡️';
-    
+
     temperature.textContent = `${Math.round(data.main.temp)}°C`;
-    description.textContent = data.weather[0].description;
+    description.textContent = data.weather[0].description
+        .replace(/\b\w/g, c => c.toUpperCase()); // Capitalize first letter of each word
+
     feelsLike.textContent = `${Math.round(data.main.feels_like)}°C`;
     humidity.textContent = `${data.main.humidity}%`;
     windSpeed.textContent = `${data.wind.speed} m/s`;
@@ -179,7 +175,7 @@ function displayWeather(data) {
 function showError(message) {
     weatherDisplay.classList.add('hidden');
     errorDiv.classList.remove('hidden');
-    errorDiv.textContent = message;
+    errorDiv.innerHTML = message.replace(/\n/g, '<br>');
 }
 
 // Show loading state
