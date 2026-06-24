@@ -1,7 +1,7 @@
 // OpenWeather API configuration
 // Get your FREE API key at: https://openweathermap.org/api
 // Then replace 'YOUR_API_KEY_HERE' below with your actual key
-const API_KEY = 'YOUR_API_KEY_HERE';
+const API_KEY = '9368b3dee66219e53793f12a3c00c427';
 const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 // If no real API key is set, the app falls back to demo mode with limited cities
