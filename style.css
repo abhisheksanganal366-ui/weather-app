@@ -11,19 +11,20 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .container {
     width: 100%;
-    max-width: 500px;
-    padding: 20px;
+    max-width: 550px;
 }
 
 .weather-app {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 40px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 100%;
 }
 
 h1 {
@@ -39,7 +40,6 @@ h1 {
     color: #333;
     padding: 5px 15px;
     border-radius: 20px;
-    display: inline-block;
     font-size: 0.85rem;
     font-weight: 600;
     margin: 0 auto 20px;
@@ -61,6 +61,7 @@ h1 {
     font-size: 16px;
     outline: none;
     transition: border-color 0.3s;
+    min-width: 0; /* prevents overflow on small screens */
 }
 
 #cityInput:focus {
@@ -68,7 +69,7 @@ h1 {
 }
 
 #searchBtn {
-    padding: 12px 30px;
+    padding: 12px 24px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
@@ -76,6 +77,8 @@ h1 {
     font-size: 16px;
     cursor: pointer;
     transition: transform 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 #searchBtn:hover {
@@ -92,58 +95,58 @@ h1 {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .city-name {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-weight: 600;
+    word-break: break-word;
 }
 
 .weather-icon {
     font-size: 5rem;
-    margin: 20px 0;
+    margin: 15px 0;
 }
 
 .temperature {
     font-size: 4rem;
     color: #667eea;
     font-weight: bold;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .description {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: #666;
     text-transform: capitalize;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .details {
     display: flex;
     justify-content: space-around;
-    margin-top: 30px;
-    padding-top: 30px;
+    margin-top: 20px;
+    padding-top: 20px;
     border-top: 2px solid #eee;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .detail-item {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 5px;
+    flex: 1;
+    min-width: 80px;
 }
 
 .label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #999;
 }
 
@@ -161,27 +164,116 @@ h1 {
     border-radius: 10px;
     margin-top: 20px;
     animation: fadeIn 0.5s;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 .hidden {
     display: none;
 }
 
-@media (max-width: 600px) {
+/* ── Tablet (up to 768px) ── */
+@media (max-width: 768px) {
     .weather-app {
-        padding: 30px 20px;
+        padding: 30px 25px;
     }
-    
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    .city-name {
+        font-size: 1.5rem;
+    }
+
+    .weather-icon {
+        font-size: 4rem;
+    }
+
+    .temperature {
+        font-size: 3.5rem;
+    }
+
+    .description {
+        font-size: 1.1rem;
+    }
+}
+
+/* ── Mobile (up to 480px) ── */
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+        align-items: flex-start;
+        padding-top: 30px;
+    }
+
+    .weather-app {
+        padding: 25px 18px;
+        border-radius: 18px;
+    }
+
     h1 {
         font-size: 1.5rem;
     }
-    
+
+    .search-box {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #cityInput {
+        width: 100%;
+        border-radius: 12px;
+        padding: 12px 16px;
+    }
+
+    #searchBtn {
+        width: 100%;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+    .city-name {
+        font-size: 1.3rem;
+    }
+
+    .weather-icon {
+        font-size: 3.5rem;
+    }
+
     .temperature {
         font-size: 3rem;
     }
-    
+
+    .description {
+        font-size: 1rem;
+    }
+
     .details {
         flex-direction: column;
-        gap: 15px;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .detail-item {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+/* ── Large screens (1200px+) ── */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 600px;
+    }
+
+    h1 {
+        font-size: 2.3rem;
+    }
+
+    .temperature {
+        font-size: 4.5rem;
     }
 }
