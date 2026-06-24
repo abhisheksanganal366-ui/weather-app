@@ -250,12 +250,7 @@ async function getWeather(city) {
             if (data) {
                 displayWeather(data);
             } else {
-                const cityList = [...new Set(Object.values(demoData).map(d => d.name))].join(', ');
-                throw new Error(
-                    `"${city}" is not available in demo mode.\n` +
-                    `Available cities: ${cityList}.\n\n` +
-                    `To search ANY city worldwide, add your free API key from openweathermap.org into app.js.`
-                );
+                throw new Error(`City "${city}" not found. Please check the spelling and try again.`);
             }
             return;
         }
